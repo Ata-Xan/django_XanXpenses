@@ -1,8 +1,49 @@
 {% extends 'base_auth.html' %}
+{% load static %}
 {% block content %}
-    <div class="card">
-    <div class="card-body">
-        <h1>login</h1>
+    <div class="d-flex align-items-center justify-content-center" style="height: 100vh;">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-title"></div>
+                        <div class="card-body"><h4>Login to your account</h4>
+                            <form action="{% url 'login' %}" method="post">
+                                {% csrf_token %}
+                                {% include 'partials/_messages.html' %}
+                                <div class="mb-3">
+                                    <label for="username"  class="form-label">Username</label>
+                                    <input type="text" name="username" class="form-control" id="username" value="{{ fieldValues.username }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" id="password" name="password" value="{{ fieldValues.password }}" required>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button"
+                                                    id="show-password-toggle">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                               <input type="submit" value="login" class="btn btn-block btn-primary submit-btn">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    </div>
+
+
+    <script src="{% static 'js/register.js' %}">
+
+
+    </script>
+
+
+
+
 {% endblock %}

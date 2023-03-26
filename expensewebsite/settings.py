@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import django_heroku
-
+from django.contrib import messages
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-4xiq(cfx5d42ch1o3pu$l^eaep2uc6c$#4)42w^=p%x3g9v-1s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'expensewebsite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
+        'NAME': os.environ.get('DB_NcAME'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST')
@@ -130,3 +130,22 @@ STATIC_ROOT =  os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 django_heroku.settings(locals())
+
+
+MESSAGE_TAGS = {
+    messages.ERROR : 'danger'
+}
+
+
+
+
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST') # The SMTP server to use for sending emails
+EMAIL_PORT = os.environ.get('EMAIL_PORT') # The port to use for the SMTP server
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS') # Use TLS (Transport Layer Security) when connecting to the SMTP server
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') # your_email@gmail.com' # The email address to use for sending emails
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') # The password for the email address
+DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER') # The default "from" address for emails sent by your application
+# EMAIL_USE_SSL = True
