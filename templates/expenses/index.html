@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
     <div class="container mt-4">
         <div class="row">
@@ -16,11 +17,22 @@
         </div>
         <div class="container">
             {% include 'partials/_messages.html' %}
-            {% if expenses.count %}
-                <table class="table table-stripped table-hover">
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="searchField">
+                        </div>
+                        <div id="search-results"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-table table-responsive">
+                <table class="table table-stripped table-hover mt-4">
                     <thead>
                     <tr>
-                        <th>Amount (CURRENCY)</th>
+                        <th>Amount ({{ user_pref }})</th>
                         <th>Category</th>
                         <th>Description</th>
                         <th>Date</th>
@@ -28,7 +40,7 @@
                         <th></th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="table-body">
                     {% for expense in page_obj %}
                         <tr>
                             <td>{{ expense.amount }}</td>
@@ -41,7 +53,8 @@
                                        class="btn btn-primary btn-sm flex-fill mr-2">
                                         <i class="bi bi-pencil-square"></i> Edit
                                     </a>
-                                    <button type="button" class="btn btn-danger btn-sm flex-fill" data-toggle="modal"
+                                    <button type="button" class="btn btn-danger btn-sm flex-fill"
+                                            data-toggle="modal"
                                             data-target="#confirm-delete-modal" id="delete-btn">
                                         <i class="bi bi-trash"></i> Delete
                                     </button>
@@ -62,10 +75,12 @@
                                                 Are you sure you want to delete this item?
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                <button type="button" class="btn btn-secondary"
+                                                        data-dismiss="modal">
                                                     Cancel
                                                 </button>
-                                                <a href="{% url 'delete-expense' expense.id %}" class="btn btn-danger">Yes</a>
+                                                <a href="{% url 'delete-expense' expense.id %}"
+                                                   class="btn btn-danger">Yes</a>
                                             </div>
                                         </div>
                                     </div>
@@ -77,84 +92,18 @@
                     {% endfor %}
                     </tbody>
                 </table>
-                <!-- Pagination HTML -->
-                <!-- Pagination HTML -->
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        {% if page_obj.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}"
-                                   aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        {% endif %}
+            </div>
 
-                        {% if page_obj.number > 3 %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page=1">1</a>
-                            </li>
-                            {% if page_obj.number > 4 %}
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#">...</a>
-                                </li>
-                            {% endif %}
-                        {% endif %}
-
-                        {% for num in page_obj.paginator.page_range %}
-                            {% if num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                                {% if page_obj.number == num %}
-                                    <li class="page-item active" aria-current="page">
-                                        <a class="page-link" href="#">{{ num }} <span
-                                                class="visually-hidden">(current)</span></a>
-                                    </li>
-                                {% else %}
-                                    <li class="page-item">
-                                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                                    </li>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-
-                        {% if page_obj.paginator.num_pages > page_obj.number|add:'3' %}
-                            {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#">...</a>
-                                </li>
-                            {% endif %}
-                            <li class="page-item">
-                                <a class="page-link"
-                                   href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
-                            </li>
-                        {% endif %}
-
-                        {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
+            <div class="no-results" style="display: none;">
+                <strong>Sorry!</strong> No results found.
+            </div>
+            {% include 'partials/_pagination.html' %}
 
 
-
-            {% endif %}
         </div>
     </div>
+    <script src="{% static 'js/searchExpenses.js' %}">
 
+    </script>
 
 {% endblock %}
